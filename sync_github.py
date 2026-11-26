@@ -74,8 +74,13 @@ def sync_and_push(commit_message: str) -> None:
         else:
             print("No new file changes to commit; pushing current HEAD if ahead.")
 
-        auth_url = REMOTE_URL.replace("https://", f"https://x-access-token:{token}@")
-        porcelain.push(repo, auth_url, refspecs=[f"refs/heads/{BRANCH}:refs/heads/{BRANCH}"])
+        porcelain.push(
+            repo,
+            REMOTE_URL,
+            refspecs=[f"refs/heads/{BRANCH}:refs/heads/{BRANCH}"],
+            username="x-access-token",
+            password=token,
+        )
         print(f"Pushed to {REMOTE_URL} ({BRANCH}). Streamlit Cloud will auto-redeploy shortly.")
     finally:
         repo.close()
